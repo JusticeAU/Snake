@@ -21,9 +21,25 @@
 
 #include "raylib.h"
 #include <string>
+#include <random>
+#include <time.h>
 
 #define RAYGUI_IMPLEMENTATION
 #define RAYGUI_SUPPORT_ICONS
+
+void spawnFood(const int gridColumns, const int gridRows, int* grid[])
+{
+    int foodX = rand() % gridColumns;
+    int foodY = rand() % gridRows;
+
+    while (grid[foodY][foodX] != 0)
+    {
+        int foodX = rand() % gridColumns;
+        int foodY = rand() % gridRows;
+    }
+
+    grid[foodY][foodX] = -1;
+}
 
 int main(int argc, char* argv[])
 {
@@ -63,6 +79,23 @@ int main(int argc, char* argv[])
     int framesPerGameStep = 15;
     int snakeLength = 1;
 
+    bool gameover = false;
+
+    // Get random Seed
+    srand(time(nullptr));
+    
+    // Spawn a random food.
+    int foodX = rand() % gridColumns;
+    int foodY = rand() % gridRows;
+
+    while (grid[foodY][foodX] != 0)
+    {
+        foodX = rand() % gridColumns;
+        foodY = rand() % gridRows;
+    }
+    grid[foodY][foodX] = -1;
+
+
     InitWindow(screenWidth, screenHeight, "Snake");
 
     SetTargetFPS(60);
@@ -93,7 +126,7 @@ int main(int argc, char* argv[])
         }
 
         // Track our frames.
-        frames++;
+        if (!gameover) frames++;
 
         // Test enough frames have passed and if so, advance the game state.
         if (frames >= framesPerGameStep)
@@ -117,17 +150,53 @@ int main(int argc, char* argv[])
                 break;
             }
 
-            // Decrease cell lifetime on entire grid
-            for (int y = 0; y < gridRows; y++)
+            // Test for consuming food at coordinate
+            if (grid[playerY][playerX] == -1)
             {
-                for (int x = 0; x < gridColumns; x++)
+                // Spawn a random food!
+                int foodX = rand() % gridColumns;
+                int foodY = rand() % gridRows;
+
+                while (grid[foodY][foodX] != 0)
                 {
-                    if (grid[y][x] > 0)  grid[y][x]--;
+                    foodX = rand() % gridColumns;
+                    foodY = rand() % gridRows;
+                }
+                grid[foodY][foodX] = -1;
+
+                snakeLength++;
+                // increase life of all cells
+                for (int y = 0; y < gridRows; y++)
+                {
+                    for (int x = 0; x < gridColumns; x++)
+                    {
+                        if (grid[y][x] > 0)  grid[y][x]++;
+                    }
+                }
+            }
+            else
+            {
+                // Decrease cell lifetime on entire grid
+                for (int y = 0; y < gridRows; y++)
+                {
+                    for (int x = 0; x < gridColumns; x++)
+                    {
+                        if (grid[y][x] > 0)  grid[y][x]--;
+                    }
                 }
             }
 
-            // Place our new head.
-            grid[playerY][playerX] = snakeLength;
+            // Test for collision with ourself.
+            if (grid[playerY][playerX] > 0)
+            {
+                grid[playerY][playerX] = -2;
+                gameover = true;
+            }
+            else
+            {
+                // Place our new head.
+                grid[playerY][playerX] = snakeLength;
+            }
         }
 
 
@@ -146,6 +215,10 @@ int main(int argc, char* argv[])
                 if (grid[y][x] == 0) DrawRectangle(gridXOrigin + (x * gridCellSize),gridYOrigin + (y * gridCellSize), gridCellSize, gridCellSize, LIGHTGRAY);
                 // test for snake body
                 if (grid[y][x] > 0) DrawRectangle(gridXOrigin + (x * gridCellSize), gridYOrigin + (y * gridCellSize), gridCellSize, gridCellSize, DARKGRAY);
+                // test for food
+                if (grid[y][x] < 0) DrawRectangle(gridXOrigin + (x * gridCellSize), gridYOrigin + (y * gridCellSize), gridCellSize, gridCellSize, GREEN);
+                // test for crash
+                if (grid[y][x] == -2) DrawRectangle(gridXOrigin + (x * gridCellSize), gridYOrigin + (y * gridCellSize), gridCellSize, gridCellSize, RED);
             }
         }
 
