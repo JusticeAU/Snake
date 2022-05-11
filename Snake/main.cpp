@@ -20,6 +20,7 @@
 ********************************************************************************************/
 
 #include "raylib.h"
+#include <string>
 
 #define RAYGUI_IMPLEMENTATION
 #define RAYGUI_SUPPORT_ICONS
@@ -28,21 +29,107 @@ int main(int argc, char* argv[])
 {
     // Initialization
     //--------------------------------------------------------------------------------------
-    int screenWidth = 800;
-    int screenHeight = 450;
+    int screenWidth = 1280;
+    int screenHeight = 720;
 
-    InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
+    // grid configuration
+    const int gridRows = 10;
+    const int gridColumns = 14;
+    const int gridCellSize = 64;
+
+    // Set up rendering offset for grid.
+    int gridXOrigin = (screenWidth / 2) - (gridColumns / 2) * gridCellSize;
+    int gridYOrigin = (screenHeight / 2) - (gridRows / 2) * gridCellSize;
+
+
+    // Create the grid
+    int grid[gridRows][gridColumns] = { 0 };
+    grid[5][5] = 1;
+
+    // Input direction
+    enum direction {
+        up,
+        down,
+        left,
+        right
+    };
+
+    // Store player 'head' position
+    int playerX = 5;
+    int playerY = 5;
+    int dir = up;
+
+    int frames = 0;
+    int framesPerGameStep = 15;
+    int snakeLength = 1;
+
+    InitWindow(screenWidth, screenHeight, "Snake");
 
     SetTargetFPS(60);
     //--------------------------------------------------------------------------------------
-
+    
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
         // Update
         //----------------------------------------------------------------------------------
-        // TODO: Update your variables here
-        //----------------------------------------------------------------------------------
+        
+        // Get Input
+        if (IsKeyPressed(KEY_UP)) dir = up;
+        if (IsKeyPressed(KEY_DOWN)) dir = down;
+        if (IsKeyPressed(KEY_LEFT)) dir = left;
+        if (IsKeyPressed(KEY_RIGHT)) dir = right;
+        if (IsKeyPressed(KEY_SPACE))
+        {
+            snakeLength++;
+            // increase life of all cells
+            for (int y = 0; y < gridRows; y++)
+            {
+                for (int x = 0; x < gridColumns; x++)
+                {
+                    if (grid[y][x] > 0)  grid[y][x]++;
+                }
+            }
+        }
+
+        // Track our frames.
+        frames++;
+
+        // Test enough frames have passed and if so, advance the game state.
+        if (frames >= framesPerGameStep)
+        {
+            frames = 0; // Reset
+
+            // update player position based on direction
+            switch (dir)
+            {
+            case up:
+                playerY -= 1;
+                break;
+            case down:
+                playerY += 1;
+                break;
+            case left:
+                playerX -= 1;
+                break;
+            case right:
+                playerX += 1;
+                break;
+            }
+
+            // Decrease cell lifetime on entire grid
+            for (int y = 0; y < gridRows; y++)
+            {
+                for (int x = 0; x < gridColumns; x++)
+                {
+                    if (grid[y][x] > 0)  grid[y][x]--;
+                }
+            }
+
+            // Place our new head.
+            grid[playerY][playerX] = snakeLength;
+        }
+
 
         // Draw
         //----------------------------------------------------------------------------------
@@ -50,7 +137,17 @@ int main(int argc, char* argv[])
 
         ClearBackground(RAYWHITE);
 
-        DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
+        // Draw Grid
+        for (int y = 0; y < gridRows; y++)
+        {
+            for (int x = 0; x < gridColumns; x++)
+            {
+                // Test for empty cell
+                if (grid[y][x] == 0) DrawRectangle(gridXOrigin + (x * gridCellSize),gridYOrigin + (y * gridCellSize), gridCellSize, gridCellSize, LIGHTGRAY);
+                // test for snake body
+                if (grid[y][x] > 0) DrawRectangle(gridXOrigin + (x * gridCellSize), gridYOrigin + (y * gridCellSize), gridCellSize, gridCellSize, DARKGRAY);
+            }
+        }
 
         EndDrawing();
         //----------------------------------------------------------------------------------
