@@ -43,18 +43,13 @@ int main(int argc, char* argv[])
     int gridXOrigin = (screenWidth / 2) - (gridColumns / 2) * gridCellSize;
     int gridYOrigin = (screenHeight / 2) - (gridRows / 2) * gridCellSize;
 
-
-    // Create the grid
-    int grid[gridRows][gridColumns] = { 0 };
-    grid[5][5] = 1;
-
     // Create the 1D grid
-    int grid1D[gridRows * gridColumns] = { 0 };
+    int grid[gridRows * gridColumns] = { 0 };
 
     // column/x = index % gridColumns
     // row/y = index / gridColumns
     // x: 5, y:5 = index of: 5 * gridColumns + 5, or (y * gridColums) + x
-    grid1D[(5 * gridColumns) + 5] = 1;
+    grid[(5 * gridColumns) + 5] = 1;
 
     // Input direction
     enum direction {
@@ -81,11 +76,11 @@ int main(int argc, char* argv[])
     // Spawn a random food.
     int food = rand() % (gridColumns * gridRows);
 
-    while (grid1D[food] != 0)
+    while (grid[food] != 0)
     {
         food = rand() % (gridColumns * gridRows);
     }
-    grid1D[food] = -1;
+    grid[food] = -1;
 
 
     InitWindow(screenWidth, screenHeight, "Snake");
@@ -110,7 +105,7 @@ int main(int argc, char* argv[])
             // increase life of all cells
             for (int i = 0; i < gridRows * gridColumns; i++)
             {
-                if (grid1D[i] > 0)  grid1D[i]++;
+                if (grid[i] > 0)  grid[i]++;
             }
         }
 
@@ -140,22 +135,22 @@ int main(int argc, char* argv[])
             }
 
             // Test for consuming food at coordinate
-            if (grid1D[(playerY * gridColumns) + playerX] == -1)
+            if (grid[(playerY * gridColumns) + playerX] == -1)
             {
                 // Spawn a random food!
                 int food = rand() % (gridColumns * gridRows);
 
-                while (grid1D[food] != 0)
+                while (grid[food] != 0)
                 {
                     food = rand() % (gridColumns * gridRows);
                 }
-                grid1D[food] = -1;
+                grid[food] = -1;
 
                 snakeLength++;
                 // increase life of all cells
                 for (int i = 0; i < gridRows * gridColumns; i++)
                 {
-                    if (grid1D[i] > 0)  grid1D[i]++;
+                    if (grid[i] > 0)  grid[i]++;
                 }
             }
             else
@@ -163,20 +158,20 @@ int main(int argc, char* argv[])
                 // Decrease cell lifetime on entire grid
                 for (int i = 0; i < gridRows * gridColumns; i++)
                 {
-                    if (grid1D[i] > 0)  grid1D[i]--;
+                    if (grid[i] > 0)  grid[i]--;
                 }
             }
 
             // Test for collision with ourself.
-            if (grid1D[(playerY * gridColumns) + playerX] > 0)
+            if (grid[(playerY * gridColumns) + playerX] > 0)
             {
-                grid1D[(playerY * gridColumns) + playerX] = -2;
+                grid[(playerY * gridColumns) + playerX] = -2;
                 gameover = true;
             }
             else
             {
                 // Place our new head.
-                grid1D[(playerY * gridColumns) + playerX] = snakeLength;
+                grid[(playerY * gridColumns) + playerX] = snakeLength;
             }
         }
 
@@ -193,13 +188,13 @@ int main(int argc, char* argv[])
             for (int x = 0; x < gridColumns; x++)
             {
                 // Test for empty cell
-                if (grid1D[(y * gridColumns) + x] == 0) DrawRectangle(gridXOrigin + (x * gridCellSize),gridYOrigin + (y * gridCellSize), gridCellSize, gridCellSize, LIGHTGRAY);
+                if (grid[(y * gridColumns) + x] == 0) DrawRectangle(gridXOrigin + (x * gridCellSize),gridYOrigin + (y * gridCellSize), gridCellSize, gridCellSize, LIGHTGRAY);
                 // test for snake body
-                if (grid1D[(y * gridColumns) + x] > 0) DrawRectangle(gridXOrigin + (x * gridCellSize), gridYOrigin + (y * gridCellSize), gridCellSize, gridCellSize, DARKGRAY);
+                if (grid[(y * gridColumns) + x] > 0) DrawRectangle(gridXOrigin + (x * gridCellSize), gridYOrigin + (y * gridCellSize), gridCellSize, gridCellSize, DARKGRAY);
                 // test for food
-                if (grid1D[(y * gridColumns) + x] < 0) DrawRectangle(gridXOrigin + (x * gridCellSize), gridYOrigin + (y * gridCellSize), gridCellSize, gridCellSize, GREEN);
+                if (grid[(y * gridColumns) + x] < 0) DrawRectangle(gridXOrigin + (x * gridCellSize), gridYOrigin + (y * gridCellSize), gridCellSize, gridCellSize, GREEN);
                 // test for crash
-                if (grid1D[(y * gridColumns) + x] == -2) DrawRectangle(gridXOrigin + (x * gridCellSize), gridYOrigin + (y * gridCellSize), gridCellSize, gridCellSize, RED);
+                if (grid[(y * gridColumns) + x] == -2) DrawRectangle(gridXOrigin + (x * gridCellSize), gridYOrigin + (y * gridCellSize), gridCellSize, gridCellSize, RED);
             }
         }
 
