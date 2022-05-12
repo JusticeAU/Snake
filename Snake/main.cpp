@@ -20,12 +20,10 @@
 ********************************************************************************************/
 
 #include "raylib.h"
-#include <string>
-#include <random>
-#include <time.h>
+#include "snakeGrid.h"
 
-#define RAYGUI_IMPLEMENTATION
-#define RAYGUI_SUPPORT_ICONS
+//#define RAYGUI_IMPLEMENTATION
+//#define RAYGUI_SUPPORT_ICONS
 
 int main(int argc, char* argv[])
 {
@@ -69,19 +67,10 @@ int main(int argc, char* argv[])
     int snakeLength = 1;
 
     bool gameover = false;
-
-    // Get random Seed
-    srand(time(nullptr));
     
-    // Spawn a random food.
-    int food = rand() % (gridColumns * gridRows);
-
-    while (grid[food] != 0)
-    {
-        food = rand() % (gridColumns * gridRows);
-    }
-    grid[food] = -1;
-
+    // Spawn initial food.
+    randomize();
+    spawnFood(grid, gridColumns* gridRows);
 
     InitWindow(screenWidth, screenHeight, "Snake");
 
@@ -134,17 +123,13 @@ int main(int argc, char* argv[])
                 break;
             }
 
+            int playerPosIndex = gridIndex(playerX, playerY, gridColumns, gridRows);
+
             // Test for consuming food at coordinate
-            if (grid[(playerY * gridColumns) + playerX] == -1)
+            if (grid[playerPosIndex] == -1)
             {
                 // Spawn a random food!
-                int food = rand() % (gridColumns * gridRows);
-
-                while (grid[food] != 0)
-                {
-                    food = rand() % (gridColumns * gridRows);
-                }
-                grid[food] = -1;
+                spawnFood(grid, gridColumns* gridRows);
 
                 snakeLength++;
                 // increase life of all cells
@@ -163,15 +148,15 @@ int main(int argc, char* argv[])
             }
 
             // Test for collision with ourself.
-            if (grid[(playerY * gridColumns) + playerX] > 0)
+            if (grid[playerPosIndex] > 0)
             {
-                grid[(playerY * gridColumns) + playerX] = -2;
+                grid[playerPosIndex] = -2;
                 gameover = true;
             }
             else
             {
                 // Place our new head.
-                grid[(playerY * gridColumns) + playerX] = snakeLength;
+                grid[playerPosIndex] = snakeLength;
             }
         }
 
@@ -187,14 +172,15 @@ int main(int argc, char* argv[])
         {
             for (int x = 0; x < gridColumns; x++)
             {
+                int i = gridIndex(x, y, gridColumns, gridRows);
                 // Test for empty cell
-                if (grid[(y * gridColumns) + x] == 0) DrawRectangle(gridXOrigin + (x * gridCellSize),gridYOrigin + (y * gridCellSize), gridCellSize, gridCellSize, LIGHTGRAY);
+                if (grid[i] == 0) DrawRectangle(gridXOrigin + (x * gridCellSize),gridYOrigin + (y * gridCellSize), gridCellSize, gridCellSize, LIGHTGRAY);
                 // test for snake body
-                if (grid[(y * gridColumns) + x] > 0) DrawRectangle(gridXOrigin + (x * gridCellSize), gridYOrigin + (y * gridCellSize), gridCellSize, gridCellSize, DARKGRAY);
+                if (grid[i] > 0) DrawRectangle(gridXOrigin + (x * gridCellSize), gridYOrigin + (y * gridCellSize), gridCellSize, gridCellSize, DARKGRAY);
                 // test for food
-                if (grid[(y * gridColumns) + x] < 0) DrawRectangle(gridXOrigin + (x * gridCellSize), gridYOrigin + (y * gridCellSize), gridCellSize, gridCellSize, GREEN);
+                if (grid[i] < 0) DrawRectangle(gridXOrigin + (x * gridCellSize), gridYOrigin + (y * gridCellSize), gridCellSize, gridCellSize, GREEN);
                 // test for crash
-                if (grid[(y * gridColumns) + x] == -2) DrawRectangle(gridXOrigin + (x * gridCellSize), gridYOrigin + (y * gridCellSize), gridCellSize, gridCellSize, RED);
+                if (grid[i] == -2) DrawRectangle(gridXOrigin + (x * gridCellSize), gridYOrigin + (y * gridCellSize), gridCellSize, gridCellSize, RED);
             }
         }
 
