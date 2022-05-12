@@ -88,15 +88,6 @@ int main(int argc, char* argv[])
         if (IsKeyPressed(KEY_DOWN)) dir = down;
         if (IsKeyPressed(KEY_LEFT)) dir = left;
         if (IsKeyPressed(KEY_RIGHT)) dir = right;
-        if (IsKeyPressed(KEY_SPACE))
-        {
-            snakeLength++;
-            // increase life of all cells
-            for (int i = 0; i < gridRows * gridColumns; i++)
-            {
-                if (grid[i] > 0)  grid[i]++;
-            }
-        }
 
         // Track our frames.
         if (!gameover) frames++;
@@ -122,17 +113,16 @@ int main(int argc, char* argv[])
                 playerX += 1;
                 break;
             }
-
+            
+            // Get our index on the grid for checks.
             int playerPosIndex = gridIndex(playerX, playerY, gridColumns, gridRows);
 
-            // Test for consuming food at coordinate
+            // Test for consuming food at index
             if (grid[playerPosIndex] == -1)
             {
-                // Spawn a random food!
+                // Spawn a new food, increase our length, and increase the life of all snake occupying cells.
                 spawnFood(grid, gridColumns* gridRows);
-
                 snakeLength++;
-                // increase life of all cells
                 for (int i = 0; i < gridRows * gridColumns; i++)
                 {
                     if (grid[i] > 0)  grid[i]++;
@@ -140,7 +130,7 @@ int main(int argc, char* argv[])
             }
             else
             {
-                // Decrease cell lifetime on entire grid
+                // Otherwise, decrease cell lifetime on all snake occupying cells.
                 for (int i = 0; i < gridRows * gridColumns; i++)
                 {
                     if (grid[i] > 0)  grid[i]--;
@@ -167,7 +157,7 @@ int main(int argc, char* argv[])
 
         ClearBackground(RAYWHITE);
 
-        // Draw Grid
+        // Draw Grid using 2D coodinates.
         for (int y = 0; y < gridRows; y++)
         {
             for (int x = 0; x < gridColumns; x++)

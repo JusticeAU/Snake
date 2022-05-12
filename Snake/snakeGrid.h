@@ -2,7 +2,7 @@
 #include <random>
 #include <time.h>
 
-// Caluclates an index for a 1D array based on 2D coordinates.
+// Calculates an index for a 1D array based on 2D coordinates.
 // If the index is outout bounds, it will return -1.
 int gridIndex(const int columnX, const int rowY, const int gridColumns, const int gridRows)
 {
@@ -11,9 +11,9 @@ int gridIndex(const int columnX, const int rowY, const int gridColumns, const in
 	else return index;
 }
 
+// Sets the random seed for the game based on time to make every game different.
 void randomize()
 {
-    // Get random Seed
     srand(time(nullptr));
 }
 
