@@ -19,8 +19,10 @@
 *
 ********************************************************************************************/
 
+#include "enums.h"
 #include "raylib.h"
 #include "snakeGrid.h"
+#include "snakeInput.h"
 
 //#define RAYGUI_IMPLEMENTATION
 //#define RAYGUI_SUPPORT_ICONS
@@ -49,45 +51,35 @@ int main(int argc, char* argv[])
     // x: 5, y:5 = index of: 5 * gridColumns + 5, or (y * gridColums) + x
     grid[(5 * gridColumns) + 5] = 1;
 
-    // Input direction
-    enum direction {
-        up,
-        down,
-        left,
-        right
-    };
-
     // Store player 'head' position
     int playerX = 5;
     int playerY = 5;
     int dir = up;
+    int dirPrevious = -1;
 
     int frames = 0;
     int framesPerGameStep = 15;
     int snakeLength = 1;
 
     bool gameover = false;
-    
+
     // Spawn initial food.
     randomize();
-    spawnFood(grid, gridColumns* gridRows);
+    spawnFood(grid, gridColumns * gridRows);
 
     InitWindow(screenWidth, screenHeight, "Snake");
 
     SetTargetFPS(60);
     //--------------------------------------------------------------------------------------
-    
+
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
         // Update
         //----------------------------------------------------------------------------------
-        
-        // Get Input
-        if (IsKeyPressed(KEY_UP)) dir = up;
-        if (IsKeyPressed(KEY_DOWN)) dir = down;
-        if (IsKeyPressed(KEY_LEFT)) dir = left;
-        if (IsKeyPressed(KEY_RIGHT)) dir = right;
+
+        // Input
+        getInput(dir, dirPrevious);
 
         // Track our frames.
         if (!gameover) frames++;
@@ -113,40 +105,48 @@ int main(int argc, char* argv[])
                 playerX += 1;
                 break;
             }
-            
+
             // Get our index on the grid for checks.
             int playerPosIndex = gridIndex(playerX, playerY, gridColumns, gridRows);
-
-            // Test for consuming food at index
-            if (grid[playerPosIndex] == -1)
+            if (playerPosIndex == -1)
             {
-                // Spawn a new food, increase our length, and increase the life of all snake occupying cells.
-                spawnFood(grid, gridColumns* gridRows);
-                snakeLength++;
-                for (int i = 0; i < gridRows * gridColumns; i++)
-                {
-                    if (grid[i] > 0)  grid[i]++;
-                }
-            }
-            else
-            {
-                // Otherwise, decrease cell lifetime on all snake occupying cells.
-                for (int i = 0; i < gridRows * gridColumns; i++)
-                {
-                    if (grid[i] > 0)  grid[i]--;
-                }
-            }
-
-            // Test for collision with ourself.
-            if (grid[playerPosIndex] > 0)
-            {
-                grid[playerPosIndex] = -2;
                 gameover = true;
             }
-            else
+
+            if (!gameover)
             {
-                // Place our new head.
-                grid[playerPosIndex] = snakeLength;
+                // Test for consuming food at index
+                if (grid[playerPosIndex] == -1)
+                {
+                    // Spawn a new food, increase our length, and increase the life of all snake occupying cells.
+                    spawnFood(grid, gridColumns * gridRows);
+                    snakeLength++;
+                    for (int i = 0; i < gridRows * gridColumns; i++)
+                    {
+                        if (grid[i] > 0)  grid[i]++;
+                    }
+                }
+                else
+                {
+                    // Otherwise, decrease cell lifetime on all snake occupying cells.
+                    for (int i = 0; i < gridRows * gridColumns; i++)
+                    {
+                        if (grid[i] > 0)  grid[i]--;
+                    }
+                }
+
+                // Test for collision with ourself.
+                if (grid[playerPosIndex] > 0)
+                {
+                    grid[playerPosIndex] = -2;
+                    gameover = true;
+                }
+                else
+                {
+                    // Place our new head.
+                    grid[playerPosIndex] = snakeLength;
+                    dirPrevious = dir;
+                }
             }
         }
 
@@ -164,7 +164,7 @@ int main(int argc, char* argv[])
             {
                 int i = gridIndex(x, y, gridColumns, gridRows);
                 // Test for empty cell
-                if (grid[i] == 0) DrawRectangle(gridXOrigin + (x * gridCellSize),gridYOrigin + (y * gridCellSize), gridCellSize, gridCellSize, LIGHTGRAY);
+                if (grid[i] == 0) DrawRectangle(gridXOrigin + (x * gridCellSize), gridYOrigin + (y * gridCellSize), gridCellSize, gridCellSize, LIGHTGRAY);
                 // test for snake body
                 if (grid[i] > 0) DrawRectangle(gridXOrigin + (x * gridCellSize), gridYOrigin + (y * gridCellSize), gridCellSize, gridCellSize, DARKGRAY);
                 // test for food
@@ -172,6 +172,10 @@ int main(int argc, char* argv[])
                 // test for crash
                 if (grid[i] == -2) DrawRectangle(gridXOrigin + (x * gridCellSize), gridYOrigin + (y * gridCellSize), gridCellSize, gridCellSize, RED);
             }
+        }
+        if (gameover)
+        {
+            DrawRectangle(gridXOrigin + (playerX * gridCellSize), gridYOrigin + (playerY * gridCellSize), gridCellSize, gridCellSize, RED);
         }
 
         EndDrawing();

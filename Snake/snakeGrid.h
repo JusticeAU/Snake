@@ -6,9 +6,10 @@
 // If the index is outout bounds, it will return -1.
 int gridIndex(const int columnX, const int rowY, const int gridColumns, const int gridRows)
 {
-	int index = (rowY * gridColumns) + columnX;
-	if (index < 0 || index >= gridColumns * gridRows) return -1;
-	else return index;
+    // test for valid x/y
+    if (columnX < 0 || columnX >= gridColumns || rowY < 0 || rowY >= gridRows) return -1;
+    int index = (rowY * gridColumns) + columnX;
+    return index;
 }
 
 // Sets the random seed for the game based on time to make every game different.
