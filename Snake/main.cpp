@@ -19,8 +19,10 @@
 *
 ********************************************************************************************/
 
+#include "enums.h"
 #include "raylib.h"
 #include "snakeGrid.h"
+#include "snakeInput.h"
 
 //#define RAYGUI_IMPLEMENTATION
 //#define RAYGUI_SUPPORT_ICONS
@@ -49,18 +51,11 @@ int main(int argc, char* argv[])
     // x: 5, y:5 = index of: 5 * gridColumns + 5, or (y * gridColums) + x
     grid[(5 * gridColumns) + 5] = 1;
 
-    // Input direction
-    enum direction {
-        up,
-        down,
-        left,
-        right
-    };
-
     // Store player 'head' position
     int playerX = 5;
     int playerY = 5;
     int dir = up;
+    int dirPrevious = -1;
 
     int frames = 0;
     int framesPerGameStep = 15;
@@ -83,11 +78,8 @@ int main(int argc, char* argv[])
         // Update
         //----------------------------------------------------------------------------------
         
-        // Get Input
-        if (IsKeyPressed(KEY_UP)) dir = up;
-        if (IsKeyPressed(KEY_DOWN)) dir = down;
-        if (IsKeyPressed(KEY_LEFT)) dir = left;
-        if (IsKeyPressed(KEY_RIGHT)) dir = right;
+        // Input
+        getInput(dir, dirPrevious);
 
         // Track our frames.
         if (!gameover) frames++;
@@ -147,6 +139,7 @@ int main(int argc, char* argv[])
             {
                 // Place our new head.
                 grid[playerPosIndex] = snakeLength;
+                dirPrevious = dir;
             }
         }
 
