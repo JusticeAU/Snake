@@ -170,12 +170,13 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SnakeGame.cpp" />
+    <ClCompile Include="SnakeMenu.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="enums.h" />
     <ClInclude Include="SnakeGame.h" />
-    <ClInclude Include="snakeGrid.h" />
-    <ClInclude Include="snakeInput.h" />
+    <ClInclude Include="SnakeMenu.h" />
+    <ClInclude Include="status.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

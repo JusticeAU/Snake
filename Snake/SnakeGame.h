@@ -1,3 +1,9 @@
+#include "status.h"
+#include "raylib.h"
+#include "enums.h"
+#include <random>
+#include <time.h>
+
 class SnakeGame
 {
 public:
@@ -30,6 +36,10 @@ public:
 
     SnakeGame();
     ~SnakeGame();
-	void Update();
+	Status Update(Status status);
 	void Draw();
+    void getInput(int& dir, const int dirPrevious);
+    int gridIndex(const int columnX, const int rowY, const int gridColumns, const int gridRows);
+    void randomize();
+    void spawnFood(int grid[], const int gridSize);
 };

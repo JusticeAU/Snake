@@ -22,8 +22,8 @@
 #include "enums.h"
 #include "raylib.h"
 #include "SnakeGame.h"
-//#include "snakeGrid.h"
-//#include "snakeInput.h"
+#include "SnakeMenu.h"
+#include "status.h"
 
 //#define RAYGUI_IMPLEMENTATION
 //#define RAYGUI_SUPPORT_ICONS
@@ -34,8 +34,15 @@ int main(int argc, char* argv[])
     //--------------------------------------------------------------------------------------
     int screenWidth = 1280;
     int screenHeight = 720;
+    
+    Status status;
+    status.paused = true;
+    status.running = true;
+    status.gameStarted = false;
 
     SnakeGame sg = SnakeGame();
+    status.sg = &sg;
+    SnakeMenu sm = SnakeMenu();
 
     InitWindow(screenWidth, screenHeight, "Snake");
 
@@ -43,17 +50,22 @@ int main(int argc, char* argv[])
     //--------------------------------------------------------------------------------------
 
     // Main game loop
-    while (!WindowShouldClose())    // Detect window close button or ESC key
+    while (status.running)    // Detect window close button or ESC key
     {
         //// Update
         ////----------------------------------------------------------------------------------
-        sg.Update();
+        if(!status.paused)
+            status = sg.Update(status);
+        else
+            status = sm.Update(status);
 
         //// Draw
         ////----------------------------------------------------------------------------------
         BeginDrawing();
         ClearBackground(RAYWHITE);
         sg.Draw();
+        if(status.paused)
+            sm.Draw();
         EndDrawing();
         //----------------------------------------------------------------------------------
     }
