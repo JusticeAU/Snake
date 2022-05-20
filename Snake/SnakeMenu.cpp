@@ -32,9 +32,9 @@ Status SnakeMenu::Update(Status status)
 			status.paused = false;
 			if (status.gameStarted)
 			{
-				delete status.sg;
-				status.sg = new SnakeGame();
+				status.restartGame = true;
 			}
+			else status.gameStarted = true;
 			break;
 		case 1:
 			std::cout << "Quitting" << std::endl;

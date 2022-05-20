@@ -1,6 +1,7 @@
 #include <string>
 #include "raylib.h"
 #include "status.h"
+#include "SnakeGame.h"
 
 class SnakeMenu
 {

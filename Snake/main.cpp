@@ -39,10 +39,10 @@ int main(int argc, char* argv[])
     status.paused = true;
     status.running = true;
     status.gameStarted = false;
+    status.restartGame = false;
 
-    SnakeGame sg = SnakeGame();
-    status.sg = &sg;
-    SnakeMenu sm = SnakeMenu();
+    SnakeGame* sg = new SnakeGame();
+    SnakeMenu* sm = new SnakeMenu();
 
     InitWindow(screenWidth, screenHeight, "Snake");
 
@@ -54,18 +54,25 @@ int main(int argc, char* argv[])
     {
         //// Update
         ////----------------------------------------------------------------------------------
+        if (status.restartGame)
+        {
+            delete sg;
+            sg = new SnakeGame();
+            status.restartGame = false;
+        }
+
         if(!status.paused)
-            status = sg.Update(status);
+            status = sg->Update(status);
         else
-            status = sm.Update(status);
+            status = sm->Update(status);
 
         //// Draw
         ////----------------------------------------------------------------------------------
         BeginDrawing();
         ClearBackground(RAYWHITE);
-        sg.Draw();
+        sg->Draw();
         if(status.paused)
-            sm.Draw();
+            sm->Draw();
         EndDrawing();
         //----------------------------------------------------------------------------------
     }
