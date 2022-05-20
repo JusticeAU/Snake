@@ -41,7 +41,7 @@ int main(int argc, char* argv[])
     status.firstStarted = false;
     status.restartRequested = false;
 
-    SnakeGame* sg = new SnakeGame();
+    SnakeGame* sg = new SnakeGame(screenWidth, screenHeight, 10, 14, 64);
     SnakeMenu* sm = new SnakeMenu();
 
     InitWindow(screenWidth, screenHeight, "Snake");
@@ -57,7 +57,7 @@ int main(int argc, char* argv[])
         if (status.restartRequested)
         {
             delete sg;
-            sg = new SnakeGame();
+            sg = new SnakeGame(screenWidth, screenHeight, 10, 14, 64);
             status.restartRequested = false;
         }
 

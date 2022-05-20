@@ -2,16 +2,25 @@
 #include <iostream>
 
 
-SnakeGame::SnakeGame()
+SnakeGame::SnakeGame(const int screenWidth, const int screenHeight, const int gridRows, const int gridColumns, const int gridCellSize)
 {
+    this->gridColumns = gridColumns;
+    this->gridRows = gridRows;
+    this->gridCellSize = gridCellSize;
+
+    gridXOrigin = (screenWidth / 2) - (gridColumns / 2) * gridCellSize;
+    gridYOrigin = (screenHeight / 2) - (gridRows / 2) * gridCellSize;
+
     grid = new int[gridRows * gridColumns]();
 
+
+    // Spawn the player.
     // column/x = index % gridColumns
     // row/y = index / gridColumns
     // x: 5, y:5 = index of: 5 * gridColumns + 5, or (y * gridColums) + x
-    grid[(5 * gridColumns) + 5] = 1;
+    grid[(playerY * gridColumns) + playerX] = 1;
 
-    dir = up;
+    dir = right;
 
     // Spawn initial food.
     randomize();
@@ -26,10 +35,7 @@ Status SnakeGame::Update(Status status)
 {
     getInput(dir, dirPrevious);
     if (IsKeyPressed(KEY_P))
-    {
-        std::cout << "Paused";
         status.paused = true;
-    }
         
 
     // Track our frames.
@@ -113,8 +119,9 @@ void SnakeGame::Draw()
             int i = gridIndex(x, y, gridColumns, gridRows);
             // Test for empty cell
             if (grid[i] == 0) DrawRectangle(gridXOrigin + (x * gridCellSize), gridYOrigin + (y * gridCellSize), gridCellSize, gridCellSize, LIGHTGRAY);
-            // test for snake body
-            if (grid[i] > 0) DrawRectangle(gridXOrigin + (x * gridCellSize), gridYOrigin + (y * gridCellSize), gridCellSize, gridCellSize, DARKGRAY);
+            // Test for snake head and body
+            if (grid[i] == snakeLength) DrawRectangle(gridXOrigin + (x * gridCellSize), gridYOrigin + (y * gridCellSize), gridCellSize, gridCellSize, DARKGRAY);
+            else if (grid[i] > 0) DrawRectangle(gridXOrigin + (x * gridCellSize), gridYOrigin + (y * gridCellSize), gridCellSize, gridCellSize, GRAY);
             // test for food
             if (grid[i] < 0) DrawRectangle(gridXOrigin + (x * gridCellSize), gridYOrigin + (y * gridCellSize), gridCellSize, gridCellSize, GREEN);
             // test for crash
