@@ -37,9 +37,9 @@ int main(int argc, char* argv[])
     
     Status status;
     status.paused = true;
-    status.running = true;
-    status.gameStarted = false;
-    status.restartGame = false;
+    status.quitRequested = false;
+    status.firstStarted = false;
+    status.restartRequested = false;
 
     SnakeGame* sg = new SnakeGame();
     SnakeMenu* sm = new SnakeMenu();
@@ -50,15 +50,15 @@ int main(int argc, char* argv[])
     //--------------------------------------------------------------------------------------
 
     // Main game loop
-    while (status.running)    // Detect window close button or ESC key
+    while (!status.quitRequested)
     {
         //// Update
         ////----------------------------------------------------------------------------------
-        if (status.restartGame)
+        if (status.restartRequested)
         {
             delete sg;
             sg = new SnakeGame();
-            status.restartGame = false;
+            status.restartRequested = false;
         }
 
         if(!status.paused)
