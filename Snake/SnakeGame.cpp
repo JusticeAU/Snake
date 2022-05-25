@@ -31,7 +31,7 @@ SnakeGame::~SnakeGame()
     delete grid;
 }
 
-Status SnakeGame::Update(Status status)
+void SnakeGame::Update(Status& status)
 {
     getInput(dir, dirPrevious);
     
@@ -103,9 +103,9 @@ Status SnakeGame::Update(Status status)
         }
     }
     if (status.gameover) status.paused = true;
-    return status;
+    return ;
 }
-void SnakeGame::Draw(Status status)
+void SnakeGame::Draw(Status& status)
 {
     // Draw Grid using 2D coodinates.
     for (int y = 0; y < gridRows; y++)
@@ -139,22 +139,22 @@ void SnakeGame::Draw(Status status)
 void SnakeGame::getInput(int& dir, const int dirPrevious)
 {
 
-    if (IsKeyPressed(KEY_UP))
+    if (IsKeyDown(KEY_UP))
     {
         if (dirPrevious != down)
             dir = up;
     }
-    if (IsKeyPressed(KEY_DOWN))
+    if (IsKeyDown(KEY_DOWN))
     {
         if (dirPrevious != up)
             dir = down;
     }
-    if (IsKeyPressed(KEY_LEFT))
+    if (IsKeyDown(KEY_LEFT))
     {
         if (dirPrevious != right)
             dir = left;
     }
-    if (IsKeyPressed(KEY_RIGHT))
+    if (IsKeyDown(KEY_RIGHT))
     {
         if (dirPrevious != left)
             dir = right;

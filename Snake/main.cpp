@@ -38,9 +38,9 @@ int main(int argc, char* argv[])
         }
 
         if(!status.paused)
-            status = sg->Update(status);
+            sg->Update(status);
         else
-            status = sm->Update(status);
+            sm->Update(status);
 
         //// Draw
         ////----------------------------------------------------------------------------------

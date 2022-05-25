@@ -10,8 +10,8 @@ class SnakeGame
 public:
     SnakeGame(const int screenWidth, const int screenHeight, const int gridRows, const int gridColumns, const int gridCellSize, Status& status);
     ~SnakeGame();
-    Status Update(Status status);
-    void Draw(Status status);
+    void Update(Status& status);
+    void Draw(Status& status);
 
 private:
     // Set up rendering offset for grid.
