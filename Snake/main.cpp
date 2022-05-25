@@ -4,9 +4,6 @@
 #include "SnakeMenu.h"
 #include "status.h"
 
-//#define RAYGUI_IMPLEMENTATION
-//#define RAYGUI_SUPPORT_ICONS
-
 int main(int argc, char* argv[])
 {
     // Initialization
