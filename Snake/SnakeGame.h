@@ -8,7 +8,7 @@
 class SnakeGame
 {
 public:
-    SnakeGame(const int screenWidth, const int screenHeight, const int gridRows, const int gridColumns, const int gridCellSize);
+    SnakeGame(const int screenWidth, const int screenHeight, const int gridRows, const int gridColumns, const int gridCellSize, Status& status);
     ~SnakeGame();
     Status Update(Status status);
     void Draw(Status status);
@@ -37,5 +37,6 @@ private:
     void getInput(int& dir, const int dirPrevious);
     int gridIndex(const int columnX, const int rowY, const int gridColumns, const int gridRows);
     void randomize();
+    void spawnFood(int grid[], const int gridSize, Status& status);
     void spawnFood(int grid[], const int gridSize);
 };
