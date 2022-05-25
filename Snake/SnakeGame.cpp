@@ -36,7 +36,7 @@ Status SnakeGame::Update(Status status)
 {
     getInput(dir, dirPrevious);
     
-    if (IsKeyPressed(KEY_P))
+    if (IsKeyPressed(KEY_ESCAPE))
         status.paused = true;
         
     // Track our frames.

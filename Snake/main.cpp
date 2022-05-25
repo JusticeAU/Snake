@@ -41,6 +41,7 @@ int main(int argc, char* argv[])
     SnakeMenu* sm = new SnakeMenu();
 
     InitWindow(screenWidth, screenHeight, "Snake");
+    SetExitKey(NULL);
 
     SetTargetFPS(60);
     //--------------------------------------------------------------------------------------
