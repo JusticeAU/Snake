@@ -15,5 +15,6 @@ private:
 	std::string options[3] = { "New Game", "Resume", "Quit" };
 
 	int cursor = 0;
-	Color backgroundColour;
+
+	Color backgroundColour {255,255,255,180}; // White with some transparency
 };
