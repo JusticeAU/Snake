@@ -6,9 +6,11 @@
 *.lo
 *.o
 *.obj
+*.iobj
 
 #Visual Studio temporary files
 *.pdb
+*.ipdb
 *.idb
 *.ilk
 *.tlog/
