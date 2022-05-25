@@ -1,5 +1,4 @@
 #include "SnakeGame.h"
-#include <iostream>
 #include <string>
 
 SnakeGame::SnakeGame(const int screenWidth, const int screenHeight, const int gridRows, const int gridColumns, const int gridCellSize, Status& status)
@@ -8,9 +7,11 @@ SnakeGame::SnakeGame(const int screenWidth, const int screenHeight, const int gr
     this->gridRows = gridRows;
     this->gridCellSize = gridCellSize;
 
+    // Calculate the origin we should start drawing the grid from to centre it.
     gridXOrigin = (screenWidth / 2) - (gridColumns / 2) * gridCellSize;
     gridYOrigin = (screenHeight / 2) - (gridRows / 2) * gridCellSize;
 
+    // Create new game world
     grid = new int[gridRows * gridColumns]();
 
 
@@ -20,6 +21,7 @@ SnakeGame::SnakeGame(const int screenWidth, const int screenHeight, const int gr
     // x: 5, y:5 = index of: 5 * gridColumns + 5, or (y * gridColums) + x
     grid[(playerY * gridColumns) + playerX] = 1;
 
+    // Set default travel direction.
     dir = right;
 
     // Spawn initial food.
@@ -105,7 +107,7 @@ void SnakeGame::Update(Status& status)
     if (status.gameover) status.paused = true;
     return ;
 }
-void SnakeGame::Draw(Status& status)
+void SnakeGame::Draw(const Status& status)
 {
     // Draw Grid using 2D coodinates.
     for (int y = 0; y < gridRows; y++)
