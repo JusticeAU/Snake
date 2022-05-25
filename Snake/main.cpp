@@ -35,13 +35,9 @@ int main(int argc, char* argv[])
     int screenWidth = 1280;
     int screenHeight = 720;
     
-    Status status;
-    status.paused = true;
-    status.quitRequested = false;
-    status.firstStarted = false;
-    status.restartRequested = false;
+    Status status = {};
 
-    SnakeGame* sg = new SnakeGame();
+    SnakeGame* sg = new SnakeGame(screenWidth, screenHeight, 10, 14, 64);
     SnakeMenu* sm = new SnakeMenu();
 
     InitWindow(screenWidth, screenHeight, "Snake");
@@ -57,7 +53,7 @@ int main(int argc, char* argv[])
         if (status.restartRequested)
         {
             delete sg;
-            sg = new SnakeGame();
+            sg = new SnakeGame(screenWidth, screenHeight, 10, 14, 64);
             status.restartRequested = false;
         }
 
@@ -70,7 +66,7 @@ int main(int argc, char* argv[])
         ////----------------------------------------------------------------------------------
         BeginDrawing();
         ClearBackground(RAYWHITE);
-        sg->Draw();
+        sg->Draw(status);
         if(status.paused)
             sm->Draw();
         EndDrawing();

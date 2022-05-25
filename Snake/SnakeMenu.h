@@ -11,8 +11,10 @@ public:
 	void Draw();
 
 private:
-	int optionCount = 2;
-	std::string options[2] = { "New Game", "Quit" };
+	int optionCount = 3;
+
+	std::string options[3] = { "New Game", "Resume", "Quit" };
+
 	int cursor = 0;
 	Color backgroundColour;
 };
