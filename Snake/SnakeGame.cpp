@@ -75,13 +75,9 @@ Status SnakeGame::Update(Status status)
             // Test for consuming food at index
             if (grid[playerPosIndex] == -1)
             {
-                // Spawn a new food, increase our length, and increase the life of all snake occupying cells.
+                // Spawn a new food, increase our length.
                 spawnFood(grid, gridColumns * gridRows);
                 snakeLength++;
-                for (int i = 0; i < gridRows * gridColumns; i++)
-                {
-                    if (grid[i] > 0)  grid[i]++;
-                }
             }
             else
             {
