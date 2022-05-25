@@ -2,8 +2,7 @@
 #include <iostream>
 #include <string>
 
-
-SnakeGame::SnakeGame(const int screenWidth, const int screenHeight, const int gridRows, const int gridColumns, const int gridCellSize)
+SnakeGame::SnakeGame(const int screenWidth, const int screenHeight, const int gridRows, const int gridColumns, const int gridCellSize, Status& status)
 {
     this->gridColumns = gridColumns;
     this->gridRows = gridRows;
@@ -25,7 +24,7 @@ SnakeGame::SnakeGame(const int screenWidth, const int screenHeight, const int gr
 
     // Spawn initial food.
     randomize();
-    spawnFood(grid, gridColumns * gridRows);
+    spawnFood(grid, gridColumns * gridRows, status);
 }
 SnakeGame::~SnakeGame()
 {
@@ -77,7 +76,7 @@ Status SnakeGame::Update(Status status)
             if (grid[playerPosIndex] == -1)
             {
                 // Spawn a new food, increase our length.
-                spawnFood(grid, gridColumns * gridRows);
+                spawnFood(grid, gridColumns * gridRows, status);
                 snakeLength++;
             }
             else
@@ -177,15 +176,34 @@ void SnakeGame::randomize()
     srand(time(nullptr));
 }
 
-// Selects a random location, checks if its free and spawns a food object here.
-void SnakeGame::spawnFood(int grid[], const int gridSize)
+// Selects a random location, checks if its free and spawns a food object here. Protects against a full grid and modifies game status on failure to place.
+void SnakeGame::spawnFood(int grid[], const int gridSize, Status& status)
 {
     // Spawn a random food.
     int food = rand() % (gridSize);
+    int attempts = 0;
+    int attemptsMax = 10;
 
     while (grid[food] != 0)
     {
+        attempts++;
+        if (attempts > attemptsMax)
+        {
+            // Walk the grid and place it. if we reach the end there is no valid space and we need to game over.
+            for (int i = 0; i < gridSize; i++)
+            {
+                if (grid[i] == 0)
+                {
+                    grid[i] = -1;
+                    return;
+                }
+            }
+            // No valid space.
+            status.gameover = true;
+            return;
+        }
         food = rand() % (gridSize);
     }
     grid[food] = -1;
+    return;
 }
