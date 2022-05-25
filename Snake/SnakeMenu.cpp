@@ -42,7 +42,7 @@ Status SnakeMenu::Update(Status status)
 	}
 	return status;
 }
-void SnakeMenu::Draw()
+void SnakeMenu::Draw(Status status)
 {
 	// Fade the background
 	DrawRectangle(0, 0, 1280, 720, backgroundColour);
@@ -67,5 +67,6 @@ void SnakeMenu::Draw()
 	DrawText("Space: Select menu option", 50, 650, 20, GRAY);
 	DrawText("P: Pause", 50, 675, 20, GRAY);
 
-
+	if(status.gameover)
+		DrawText("Game Over!", 540, 200, 30, MAROON);
 }

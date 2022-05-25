@@ -1,5 +1,6 @@
 #include "SnakeGame.h"
 #include <iostream>
+#include <string>
 
 
 SnakeGame::SnakeGame(const int screenWidth, const int screenHeight, const int gridRows, const int gridColumns, const int gridCellSize)
@@ -124,6 +125,12 @@ void SnakeGame::Draw(Status status)
             if (grid[i] == -2) DrawRectangle(gridXOrigin + (x * gridCellSize), gridYOrigin + (y * gridCellSize), gridCellSize, gridCellSize, RED);
         }
     }
+
+    // Draw score
+    std::string scoreText = "SCORE: " + std::to_string(snakeLength-1);
+    DrawText(scoreText.c_str(), gridXOrigin, 15, 24, DARKGRAY);
+
+
     if (status.gameover)
     {
         DrawRectangle(gridXOrigin + (playerX * gridCellSize), gridYOrigin + (playerY * gridCellSize), gridCellSize, gridCellSize, RED);
