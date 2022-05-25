@@ -34,12 +34,12 @@ SnakeGame::~SnakeGame()
 Status SnakeGame::Update(Status status)
 {
     getInput(dir, dirPrevious);
+    
     if (IsKeyPressed(KEY_P))
         status.paused = true;
         
-
     // Track our frames.
-    if (!gameover) frames++;
+    if (!status.gameover) frames++;
 
     // Test enough frames have passed and if so, advance the game state.
     if (frames >= framesPerGameStep)
@@ -67,10 +67,10 @@ Status SnakeGame::Update(Status status)
         int playerPosIndex = gridIndex(playerX, playerY, gridColumns, gridRows);
         if (playerPosIndex == -1)
         {
-            gameover = true;
+            status.gameover = true;
         }
 
-        if (!gameover)
+        if (!status.gameover)
         {
             // Test for consuming food at index
             if (grid[playerPosIndex] == -1)
@@ -92,7 +92,7 @@ Status SnakeGame::Update(Status status)
             if (grid[playerPosIndex] > 0)
             {
                 grid[playerPosIndex] = -2;
-                gameover = true;
+                status.gameover = true;
             }
             else
             {
@@ -102,10 +102,10 @@ Status SnakeGame::Update(Status status)
             }
         }
     }
-    if (gameover) status.paused = true;
+    if (status.gameover) status.paused = true;
     return status;
 }
-void SnakeGame::Draw()
+void SnakeGame::Draw(Status status)
 {
     // Draw Grid using 2D coodinates.
     for (int y = 0; y < gridRows; y++)
@@ -124,7 +124,7 @@ void SnakeGame::Draw()
             if (grid[i] == -2) DrawRectangle(gridXOrigin + (x * gridCellSize), gridYOrigin + (y * gridCellSize), gridCellSize, gridCellSize, RED);
         }
     }
-    if (gameover)
+    if (status.gameover)
     {
         DrawRectangle(gridXOrigin + (playerX * gridCellSize), gridYOrigin + (playerY * gridCellSize), gridCellSize, gridCellSize, RED);
     }

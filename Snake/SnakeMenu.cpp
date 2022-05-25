@@ -27,15 +27,16 @@ Status SnakeMenu::Update(Status status)
 		switch (cursor)
 		{
 		case 0:
+			status.restartRequested = true;
 			status.paused = false;
-			if (status.firstStarted)
-			{
-				status.restartRequested = true;
-			}
-			else status.firstStarted = true;
+			status.gameover = false;
 			break;
 		case 1:
-			std::quick_exit(0);
+			if(!status.gameover)
+				status.paused = false;
+			break;
+		case 2:
+			status.quitRequested = true;
 			break;
 		}
 	}

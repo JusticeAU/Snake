@@ -33,7 +33,7 @@ public:
     SnakeGame(const int screenWidth, const int screenHeight, const int gridRows, const int gridColumns, const int gridCellSize);
     ~SnakeGame();
 	Status Update(Status status);
-	void Draw();
+	void Draw(Status status);
     void getInput(int& dir, const int dirPrevious);
     int gridIndex(const int columnX, const int rowY, const int gridColumns, const int gridRows);
     void randomize();
