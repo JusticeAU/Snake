@@ -2,7 +2,6 @@
 
 SnakeMenu::SnakeMenu()
 {
-	backgroundColour.a = 200;
 }
 
 void SnakeMenu::Update(Status& status)
@@ -30,6 +29,7 @@ void SnakeMenu::Update(Status& status)
 			status.restartRequested = true;
 			status.paused = false;
 			status.gameover = false;
+			cursor = 1; // Move cursor to resume game to avoid accidental reset.
 			break;
 		case 1: // Resume Game
 			if(!status.gameover)
