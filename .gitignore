@@ -13,7 +13,7 @@
 *.ilk
 *.tlog/
 *.recipe
-*/.vs/
+*.vs/
 *.log
 
 # Precompiled Headers
