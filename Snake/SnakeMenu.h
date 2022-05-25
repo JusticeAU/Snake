@@ -6,8 +6,8 @@ class SnakeMenu
 {
 public:
 	SnakeMenu();
-	Status Update(Status status);
-	void Draw(Status status);
+	void Update(Status& status);
+	void Draw(Status& status);
 
 private:
 	int optionCount = 3;

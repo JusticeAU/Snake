@@ -5,7 +5,7 @@ SnakeMenu::SnakeMenu()
 	backgroundColour.a = 200;
 }
 
-Status SnakeMenu::Update(Status status)
+void SnakeMenu::Update(Status& status)
 {
 	if (IsKeyPressed(KEY_UP))
 	{
@@ -40,9 +40,9 @@ Status SnakeMenu::Update(Status status)
 			break;
 		}
 	}
-	return status;
+	return;
 }
-void SnakeMenu::Draw(Status status)
+void SnakeMenu::Draw(Status& status)
 {
 	// Fade the background
 	DrawRectangle(0, 0, 1280, 720, backgroundColour);
