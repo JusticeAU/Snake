@@ -130,7 +130,7 @@ void SnakeGame::Draw(Status status)
     std::string scoreText = "SCORE: " + std::to_string(snakeLength-1);
     DrawText(scoreText.c_str(), gridXOrigin, 15, 24, DARKGRAY);
 
-
+    // Draw collision if gameover.
     if (status.gameover)
     {
         DrawRectangle(gridXOrigin + (playerX * gridCellSize), gridYOrigin + (playerY * gridCellSize), gridCellSize, gridCellSize, RED);

@@ -1,5 +1,4 @@
 #include "SnakeMenu.h"
-#include <iostream>
 
 SnakeMenu::SnakeMenu()
 {
