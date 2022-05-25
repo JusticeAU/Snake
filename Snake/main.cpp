@@ -68,7 +68,7 @@ int main(int argc, char* argv[])
         ClearBackground(RAYWHITE);
         sg->Draw(status);
         if(status.paused)
-            sm->Draw();
+            sm->Draw(status);
         EndDrawing();
         //----------------------------------------------------------------------------------
     }

@@ -1,14 +1,14 @@
 #include <string>
 #include "raylib.h"
 #include "status.h"
-#include "SnakeGame.h"
+//#include "SnakeGame.h"
 
 class SnakeMenu
 {
 public:
 	SnakeMenu();
 	Status Update(Status status);
-	void Draw();
+	void Draw(Status status);
 
 private:
 	int optionCount = 3;

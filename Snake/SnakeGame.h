@@ -28,8 +28,6 @@ public:
     int framesPerGameStep = 15;
     int snakeLength = 1;
 
-    bool gameover = false;
-
     SnakeGame(const int screenWidth, const int screenHeight, const int gridRows, const int gridColumns, const int gridCellSize);
     ~SnakeGame();
 	Status Update(Status status);
